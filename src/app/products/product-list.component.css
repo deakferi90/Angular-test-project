@@ -29,3 +29,11 @@ tr {
     display: grid;
     justify-content: center;
 }
+
+.input-el {
+    margin-top: -1px;
+}
+
+.sort-btn {
+    margin-top: 2px;
+}

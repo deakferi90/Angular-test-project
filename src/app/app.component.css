@@ -1,3 +1,7 @@
 .nav-link {
   font-size: large;
 }
+
+.card-body {
+  border: none;
+}

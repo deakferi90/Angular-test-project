@@ -6,7 +6,7 @@
     <div class="row">
       <div class="col-md-2">Filter by:</div>
       <div class="col-md-4">
-        <input type="text" class="input-el" [(ngModel)]="listFilter" />
+        <input type="text" [(ngModel)]="listFilter" />
       </div>
     </div>
     <div class="row" *ngIf="listFilter">
@@ -17,21 +17,28 @@
     <div class="table-responsive">
       <table class="table" *ngIf="products.length">
         <thead>
-          <tr class="table-row">
+          <tr style="line-height: 34px;">
             <th>
               <button class="btn btn-primary" (click)="toggleImage()">
                 {{ showImage ? "Hide" : "Show" }} Image
               </button>
             </th>
-            <th>Product</th>
-            <th>Code</th>
+            <th class="container-with-arrow">
+              <div class="arrow">
+              <div><i class="fa fa-chevron-up" (click)="handleSort()" style="color: #4e1f51"></i></div>
+              <div class="arrow-cont">
+                <i style="color: #4e1f51" (click)="reverseSort()" class="fa fa-chevron-down"></i>
+              </div>
+              </div>
+              <p class="parag">Product</p>
+            </th>
             <th>Available</th>
             <th>Price</th>
             <th>5 Star Rating</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="table-row" *ngFor="let product of filteredProducts">
+          <tr *ngFor="let product of filteredProducts">
             <td>
               <img
                 *ngIf="showImage"
@@ -41,21 +48,24 @@
                 [style.margin.px]="imageMargin"
               />
             </td>
-            <td>{{ product.productName | lowercase }}</td>
+            <td>
+              <a [routerLink]="['/products', product.productId]">
+                {{ product.productName }}
+              </a>
+              <!-- <td><a [routerLink]="['/products', product.productId]"]>{{ product.productName | lowercase }}</a></td> -->
+            </td>
             <td>{{ product.productCode | lowercase }}</td>
             <td>{{ product.releaseDate }}</td>
-            <td>{{ product.price | currency : "USD" }}</td>
+            <td>{{ product.price | currency : "USD" : "symbol" : "1.2-2" }}</td>
             <td>
-              <pm-star
-                class="pm-star"
-                [rating]="product.starRating"
-                (notify)="onNotify($event)"
-              ></pm-star>
+              <pm-star [rating]="product.starRating"> </pm-star>
             </td>
           </tr>
         </tbody>
       </table>
-      <button (click)='handleSort()' class="btn btn-primary">Sort Table By Product Name</button>
     </div>
   </div>
+</div>
+<div *ngIf="errorMessage" class="alert alert-danger">
+  Error: {{ errorMessage }}
 </div>

@@ -1,28 +1,26 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Subscription } from "rxjs";
 import { IProduct } from "./product";
 import { ProductService } from "./product.service";
-import { Subscription } from "rxjs";
 
 @Component({
-  selector: 'pm-products',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit, OnDestroy {
-  pageTitle: string = 'Product List';
-  imageWidth: number = 50;
-  imageMargin: number = 2;
-  showImage: boolean = false;
-  errorMessage: string = 'Unfortenately its not subscribing';
+  pageTitle = 'Product List';
+  imageWidth = 50;
+  imageMargin = 2;
+  showImage = false;
+  errorMessage = '';
   sub!: Subscription;
 
-  private _listFilter: string = '';
+  private ListFilter = '';
   get listFilter(): string {
-    return this._listFilter;
+    return this.ListFilter;
   }
   set listFilter(value: string) {
-    this._listFilter = value;
-    console.log('In setter:', value);
+    this.ListFilter = value;
     this.filteredProducts = this.performFilter(value);
   }
 
@@ -45,27 +43,17 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.sub = this.productService.getProducts().subscribe({
       next: products => {
         this.products = products;
-        this.filteredProducts = this.products
+        this.filteredProducts = this.products;
       },
       error: err => this.errorMessage = err
-    })
+    });
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe()
+    this.sub.unsubscribe();
   }
 
-  onNotify(message: string): void {
-    this.pageTitle = 'Product List: ' + message;
-  }
-
-  handleSort() {
-    this.filteredProducts.sort((a,b) => {
-        if(a.productName > b.productName) {
-        return 1;
-      } else {
-        return -1;
-      }
-    })
-  }
+  // onRatingClicked(message: string): void {
+  //   this.pageTitle = 'Product List: ' + message;
+  // }
 }
